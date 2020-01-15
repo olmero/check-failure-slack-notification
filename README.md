@@ -5,7 +5,7 @@ GitHub action to report a check failure to Slack.
 
 ## Usage
 
-```
+```yaml
 - name: Publish Build Status to Slack
   if: failed()
   uses: olmero/check-failure-slack-notification@master
