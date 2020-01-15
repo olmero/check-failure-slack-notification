@@ -1,0 +1,9 @@
+name: 'GitHub Check failure Slack Reporter'
+description: 'Reports failed checks to slack'
+inputs:
+  slack-channel:
+    description: 'The Slack channel id to post messages to'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
