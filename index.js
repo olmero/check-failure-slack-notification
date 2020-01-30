@@ -2,7 +2,15 @@ const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github')
 const { WebClient } = require('@slack/web-api');
 
-async function getCheckSuite() {
+function getSha() {
+    if (context.eventName === 'pull_request') {
+        return context.payload.after;
+    }
+
+    return context.sha;
+}
+
+async function getCheckSuite(sha) {
     const github = new GitHub(process.env.GITHUB_TOKEN);
 
     console.log(context);
@@ -10,15 +18,15 @@ async function getCheckSuite() {
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: context.sha,
+        ref: sha,
         app_id: 15368
     });
 
-    // const checkSuiteId = response.data.check_suites[0].id;
+    const checkSuiteId = response.data.check_suites[0].id;
 
     return {
-        // id: checkSuiteId,
-        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}` ///checks?check_suite_id=${checkSuiteId}
+        id: checkSuiteId,
+        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha}/checks?check_suite_id=${checkSuiteId}`
     }
 }
 
@@ -37,7 +45,7 @@ async function run() {
         console.log(process.env);
         const slackChannel = core.getInput('slack-channel');
 
-        const checkSuite = await getCheckSuite();
+        const checkSuite = await getCheckSuite(getSha());
         return await sendSlackMessage(slackChannel, checkSuite);
     } catch (error) {
         core.setFailed(error.message);
