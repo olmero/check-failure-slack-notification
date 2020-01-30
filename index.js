@@ -2,25 +2,17 @@ const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github')
 const { WebClient } = require('@slack/web-api');
 
-function getSha() {
-    console.log(context)
-    if (context.eventName === 'pull_request') {
-        return context.payload.after;
-    }
-
-    return context.sha;
-}
-
 async function getCheckSuite(sha) {
     const github = new GitHub(process.env.GITHUB_TOKEN)
 
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: sha,
+        ref: context.sha,
         app_id: 15368
     });
 
+    console.log(response.data);
     const checkSuiteId = response.data.check_suites[0].id;
 
     return {
