@@ -15,7 +15,7 @@ async function getCheckSuite() {
     // const checkSuiteId = response.data.check_suites[0].id;
 
     return {
-        id: checkSuiteId,
+        // id: checkSuiteId,
         url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}` ///checks?check_suite_id=${checkSuiteId}
     }
 }
