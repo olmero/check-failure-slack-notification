@@ -13,8 +13,6 @@ function getSha() {
 async function getCheckSuite(sha) {
     const github = new GitHub(process.env.GITHUB_TOKEN);
 
-    console.log(context);
-
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -42,7 +40,6 @@ async function sendSlackMessage(channel, checkSuite) {
 
 async function run() {
     try {
-        console.log(process.env);
         const slackChannel = core.getInput('slack-channel');
 
         const checkSuite = await getCheckSuite(getSha());
