@@ -8,16 +8,15 @@ async function getCheckSuite() {
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: context.ref,
+        ref: context.sha,
         app_id: 15368
     });
 
-    console.log(response.data);
-    const checkSuiteId = response.data.check_suites[0].id;
+    // const checkSuiteId = response.data.check_suites[0].id;
 
     return {
         id: checkSuiteId,
-        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha}/checks?check_suite_id=${checkSuiteId}`
+        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}` ///checks?check_suite_id=${checkSuiteId}
     }
 }
 
