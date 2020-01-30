@@ -8,7 +8,7 @@ async function getCheckSuite() {
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: context.sha,
+        ref: context.ref,
         app_id: 15368
     });
 
