@@ -21,7 +21,7 @@ async function getCheckSuite() {
 }
 
 async function sendSlackMessage(channel, checkSuite) {
-    const slack = new Slack(process.env.SLACK_TOKEN);
+    const web = new WebClient(process.env.SLACK_TOKEN);
 
     return await web.chat.postMessage({
         channel: channel,
