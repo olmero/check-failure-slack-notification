@@ -3,7 +3,9 @@ const { GitHub, context } = require('@actions/github')
 const { WebClient } = require('@slack/web-api');
 
 async function getCheckSuite() {
-    const github = new GitHub(process.env.GITHUB_TOKEN)
+    const github = new GitHub(process.env.GITHUB_TOKEN);
+
+    console.log(context);
 
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
@@ -32,6 +34,7 @@ async function sendSlackMessage(channel, checkSuite) {
 
 async function run() {
     try {
+        console.log(process.env);
         const slackChannel = core.getInput('slack-channel');
 
         const checkSuite = await getCheckSuite();
