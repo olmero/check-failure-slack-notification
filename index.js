@@ -3,6 +3,8 @@ const { GitHub, context } = require('@actions/github')
 const { WebClient } = require('@slack/web-api');
 
 function getSha() {
+    console.log(context);
+
     if (context.eventName === 'pull_request') {
         return context.payload.after;
     }
