@@ -21,7 +21,6 @@ async function getCheckSuite() {
 }
 
 function getPullRequestCheckSuite() {
-    console.log(context);
     return {
         id: null,
         url: `${context.payload.pull_request.html_url}/checks`
