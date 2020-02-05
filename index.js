@@ -7,12 +7,12 @@ const github = new GitHub(process.env.GITHUB_TOKEN);
 async function getSha() {
     if (context.eventName === 'pull_request') {
         const prCommit = await github.git.getCommit({
-            owner: 'olmero',
-            repo: 'kafka-connect-event-transformer',
-            commit_sha: '86b5a61d3a33ddd00d7de129b336ba26daeb06f9'
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: context.sha
         });
 
-        return prCommit.data.parents[1];
+        return prCommit.data.parents[1].sha;
     }
 
     return context.sha;
