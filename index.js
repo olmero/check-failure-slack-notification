@@ -19,6 +19,8 @@ async function getSha() {
 }
 
 async function getCheckSuite(sha) {
+    console.log(`Getting check-suite for commit ${sha}`);
+
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
