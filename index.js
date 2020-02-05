@@ -2,6 +2,8 @@ const core = require('@actions/core');
 const { GitHub, context } = require('@actions/github');
 const { WebClient } = require('@slack/web-api');
 
+const github = new GitHub(process.env.GITHUB_TOKEN);
+
 async function getSha() {
     if (context.eventName === 'pull_request') {
         const prCommit = await github.git.getCommit({
@@ -17,8 +19,6 @@ async function getSha() {
 }
 
 async function getCheckSuite(sha) {
-    const github = new GitHub(process.env.GITHUB_TOKEN);
-
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
