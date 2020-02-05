@@ -1,14 +1,28 @@
 const core = require('@actions/core');
-const { GitHub, context } = require('@actions/github')
+const { GitHub, context } = require('@actions/github');
 const { WebClient } = require('@slack/web-api');
 
-async function getCheckSuite() {
+async function getSha() {
+    if (context.eventName === 'pull_request') {
+        const prCommit = await github.git.getCommit({
+            owner: 'olmero',
+            repo: 'kafka-connect-event-transformer',
+            commit_sha: '86b5a61d3a33ddd00d7de129b336ba26daeb06f9'
+        });
+
+        return prCommit.data.parents[1];
+    }
+
+    return context.sha;
+}
+
+async function getCheckSuite(sha) {
     const github = new GitHub(process.env.GITHUB_TOKEN);
 
     const response = await github.checks.listSuitesForRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: context.sha,
+        ref: sha,
         app_id: 15368
     });
 
@@ -17,13 +31,6 @@ async function getCheckSuite() {
     return {
         id: checkSuiteId,
         url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha}/checks?check_suite_id=${checkSuiteId}`
-    }
-}
-
-function getPullRequestCheckSuite() {
-    return {
-        id: null,
-        url: `${context.payload.pull_request.html_url}/checks`
     }
 }
 
@@ -45,9 +52,7 @@ async function run() {
     try {
         const slackChannel = core.getInput('slack-channel');
 
-        const isPr = context.eventName === 'pull_request';
-
-        const checkSuite = isPr ? getPullRequestCheckSuite() : await getCheckSuite();
+        const checkSuite = await getCheckSuite(getSha());
         return await sendSlackMessage(slackChannel, checkSuite);
     } catch (error) {
         core.setFailed(error.message);
