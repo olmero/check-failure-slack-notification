@@ -54,7 +54,7 @@ async function run() {
     try {
         const slackChannel = core.getInput('slack-channel');
 
-        const checkSuite = await getCheckSuite(getSha());
+        const checkSuite = await getCheckSuite(await getSha());
         return await sendSlackMessage(slackChannel, checkSuite);
     } catch (error) {
         core.setFailed(error.message);
