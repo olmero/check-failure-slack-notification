@@ -43,7 +43,7 @@ async function sendSlackMessage(channel, checkSuite) {
         channel: channel,
         attachments: [
             {
-                text: `Check for <${checkSuite.url}|${context.repo.repo}> failed`,
+                text: `${context.workflow} for <${checkSuite.url}|${context.repo.repo}> by user ${context.actor} failed`,
                 color: '#cc0000'
             }
         ]
